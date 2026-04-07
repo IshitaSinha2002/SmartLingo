@@ -10,10 +10,10 @@ def translate():
     try:
         data = request.get_json()
         text = data.get("text", "")
+        source_lang = data.get("source", "en")
         target_lang = data.get("target", "fr")
 
-        # ✅ MyMemory API
-        url = f"https://api.mymemory.translated.net/get?q={text}&langpair=en|{target_lang}"
+        url = f"https://api.mymemory.translated.net/get?q={text}&langpair={source_lang}|{target_lang}"
 
         response = requests.get(url)
         result = response.json()
@@ -27,7 +27,6 @@ def translate():
     except Exception as e:
         print("ERROR:", e)
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     app.run(debug=True)

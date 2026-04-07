@@ -7,23 +7,26 @@ import face3 from "../images/face3.png";
 const TranslatorUI = () => {
   const [inputText, setInputText] = useState("");
   const [outputText, setOutputText] = useState("");
+  const [inputLang, setInputLang] = useState("English");
   const [outputLang, setOutputLang] = useState("French");
+  const [loading, setLoading] = useState(false);
 
   const languages = [
+    { name: "English", code: "en" },
     { name: "French", code: "fr" },
     { name: "Spanish", code: "es" },
     { name: "German", code: "de" },
-    { name: "Hindi", code: "hi" },
-    { name: "English", code: "en" }
+    { name: "Hindi", code: "hi" }
   ];
 
   const handleTranslate = async () => {
     if (!inputText.trim()) return;
 
     try {
-      const selectedLang = languages.find(
-        (lang) => lang.name === outputLang
-      );
+      setLoading(true);
+
+      const source = languages.find(l => l.name === inputLang);
+      const target = languages.find(l => l.name === outputLang);
 
       const res = await fetch("http://127.0.0.1:5000/translate", {
         method: "POST",
@@ -32,7 +35,8 @@ const TranslatorUI = () => {
         },
         body: JSON.stringify({
           text: inputText,
-          target: selectedLang.code
+          source: source.code,
+          target: target.code
         }),
       });
 
@@ -47,7 +51,14 @@ const TranslatorUI = () => {
     } catch (err) {
       console.error(err);
       setOutputText("Server not reachable");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleClear = () => {
+    setInputText("");
+    setOutputText("");
   };
 
   return (
@@ -72,6 +83,15 @@ const TranslatorUI = () => {
 
         {/* INPUT */}
         <div className="card">
+          <select
+            value={inputLang}
+            onChange={(e) => setInputLang(e.target.value)}
+          >
+            {languages.map((lang, i) => (
+              <option key={i}>{lang.name}</option>
+            ))}
+          </select>
+
           <textarea
             placeholder="Enter text..."
             value={inputText}
@@ -79,10 +99,16 @@ const TranslatorUI = () => {
           />
         </div>
 
-        {/* BUTTON */}
-        <button className="translate-btn" onClick={handleTranslate}>
-          Translate
-        </button>
+        {/* ACTIONS */}
+        <div className="actions">
+          <button className="translate-btn" onClick={handleTranslate}>
+            {loading ? "Translating..." : "Translate"}
+          </button>
+
+          <button className="clear-btn" onClick={handleClear}>
+            Clear
+          </button>
+        </div>
 
         {/* OUTPUT */}
         <div className="card">
