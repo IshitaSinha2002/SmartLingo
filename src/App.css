@@ -29,8 +29,8 @@ body {
   font-size: 64px;
   font-weight: 700;
   color: #2c2c2c;
-  margin-bottom: 12px;   /* space below title */
-  line-height: 1.2;      /* prevents overlap */
+  margin-bottom: 12px;
+  line-height: 1.2;
 }
 
 /* SUBTITLE */
@@ -38,8 +38,8 @@ body {
   font-size: 18px;
   color: #555;
   margin-top: 0;
-  margin-bottom: 30px;   /* space before faces */
-  line-height: 1.5;      /* clean readability */
+  margin-bottom: 30px;
+  line-height: 1.5;
 }
 
 /* FACES */
@@ -74,12 +74,14 @@ body {
 
 /* DROPDOWN */
 .card select {
+  display: block;
+  margin: 0 auto 12px auto;   /* center align */
   background: #2c2c2c;
   color: white;
   border: none;
   padding: 8px 14px;
   border-radius: 8px;
-  margin-bottom: 12px;
+  font-size: 14px;
 }
 
 /* TEXTAREA */
@@ -91,6 +93,13 @@ body {
   background: transparent;
   resize: none;
   font-size: 15px;
+
+  color: #2c2c2c;   /* ✅ FIXED TEXT VISIBILITY */
+}
+
+/* PLACEHOLDER */
+.card textarea::placeholder {
+  color: #777;      /* softer placeholder */
 }
 
 /* BUTTON */
